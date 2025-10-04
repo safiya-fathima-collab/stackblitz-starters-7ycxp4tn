@@ -1,15 +1,27 @@
+require('dotenv').config();
+const mongoose = require('mongoose');
 const express = require('express');
-const { resolve } = require('path');
+
 
 const app = express();
-const port = 3010;
 
-app.use(express.static('static'));
 
-app.get('/', (req, res) => {
-  res.sendFile(resolve(__dirname, 'pages/index.html'));
+app.use(express.json());
+
+const MONGO_URI='mongodb://localhost:27017/jobTrackerDB';
+const PORT = process.env.PORT||3000;
+
+mongoose.connect(MONGO_URI,{
+  useUnifiedTopology:true,
+  useNewUrlParser:true,
+})
+.then(()=>{
+  console.log('Connected to MongoDB');
+})
+.catch(()=>{
+  console.log(`Error connecting to MongoDB ${err}`)
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server listening at http://localhost:${PORT}`);
 });
